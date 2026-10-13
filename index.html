@@ -79,6 +79,8 @@
             transform: translate(-50%, -50%) scale(1.3); /* Increased scale for larger zoom */
             width: 95%; /* Make it take up more screen width */
             max-width: 900px; /* Allow it to get wider on large screens */
+            max-height: 90vh; /* Allow scrolling if content is long */
+            overflow-y: auto;
             z-index: 1000;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Stronger shadow to pop out more */
             font-size: 1.3rem; /* Increase base font size when zoomed */
@@ -217,6 +219,24 @@
             display: none;
         }
 
+        /* Q&A Container styles */
+        .qa-container {
+            display: none;
+        }
+
+        .interactive-block.zoomed .qa-container {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+            cursor: default; /* 防止鼠標在問題區域顯示為點擊放大的樣式 */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive adjustments */
         @media (max-width: 640px) {
             .title-block { font-size: 2rem; }
@@ -273,6 +293,16 @@
                     <div class="interactive-block author-block mt-4" onclick="toggleZoom(this)">
                         By Fred Wong<br>
                         5 October
+                        
+                        <!-- Q1 Container -->
+                        <div class="qa-container mt-4 pt-4 border-t border-gray-300 text-left">
+                            <div class="font-bold text-gray-800 text-xl mb-3">Answer Q1:</div>
+                            <div class="text-gray-800 text-lg mb-4 font-medium">When is the publishing date of this article?</div>
+                            <button onclick="revealAnswer(event, 'ans-q1')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
+                            <div id="ans-q1" class="hidden mt-4 p-4 bg-green-50 text-green-800 rounded-lg font-bold border border-green-200 shadow-inner">
+                                Answer: 5 October
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -283,16 +313,75 @@
                     <span class="paragraph-number text-gray-700 bg-gray-200">1</span>
                     Online learning isn't always <span class="font-semibold">easy</span>. There are some challenges you may face. <span class="font-semibold">Don't panic</span> ... we're here to help!
                 </p>
+                
+                <!-- Q2 Container -->
+                <div class="qa-container mt-6 pt-5 border-t-2 border-gray-300">
+                    <div class="font-bold text-gray-800 text-xl mb-3">Answer Q2:</div>
+                    <div class="text-gray-800 text-lg mb-4 font-medium">This article aims to _______.</div>
+                    <ul class="text-gray-700 text-lg mb-6 space-y-3 list-none">
+                        <li class="pl-3 py-1 hover:bg-gray-200 rounded transition-colors">A. ask people what they think about online learning.</li>
+                        <li class="pl-3 py-1 hover:bg-gray-200 rounded transition-colors">B. provide tips and reminders about about online learning.</li>
+                        <li class="pl-3 py-1 hover:bg-gray-200 rounded transition-colors">C. suggest ways to make online learning fun.</li>
+                        <li class="pl-3 py-1 hover:bg-gray-200 rounded transition-colors">D. tell people what online learning means.</li>
+                    </ul>
+                    <button onclick="revealAnswer(event, 'ans-q2')" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
+                    <div id="ans-q2" class="hidden mt-5 p-4 bg-green-50 text-green-800 rounded-lg font-bold border border-green-200 shadow-inner">
+                        Answer: B. provide tips and reminders about about online learning.
+                    </div>
+                </div>
             </div>
 
             <!-- Paragraph 2: Preparing -->
             <div class="interactive-block paragraph-block p-blue" onclick="toggleZoom(this)">
+                <!-- Collapsible Paragraph 1 at the TOP of Paragraph 2 (Visible only when zoomed) -->
+                <div class="qa-container mb-4">
+                    <button onclick="togglePara1(event)" class="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-lg text-sm md:text-base transition-colors flex items-center gap-2 border border-white/40 shadow-sm">
+                        📖 顯示 Paragraph 1 (Show Paragraph 1)
+                    </button>
+                    <!-- Paragraph 1 Box appearing ABOVE Paragraph 2 -->
+                    <div id="para1-preview" class="hidden mt-3 p-4 bg-black/25 rounded-lg text-sm md:text-base border border-white/30 backdrop-blur-sm shadow-inner">
+                        <div class="font-bold text-xs uppercase tracking-wider opacity-80 mb-1">Paragraph 1:</div>
+                        <p class="italic">"Online learning isn't always easy. There are some challenges you may face. Don't panic ... we're here to help!"</p>
+                    </div>
+                </div>
+
                 <h3 class="paragraph-title">
                     <span class="paragraph-number">2</span> Preparing for your online class
                 </h3>
                 <p class="paragraph-text">
                     Try to sign in early for your class. Spend some time trying out the different functions of the software you are using. Then, you can <span class="font-semibold">make sure the video and sound work properly</span>.
                 </p>
+
+                <!-- Q3 Container -->
+                <div class="qa-container mt-6 pt-5 border-t-2 border-white/40 text-white">
+                    <div class="font-bold text-xl mb-2">Answer Q3:</div>
+                    <div class="text-sm md:text-base font-semibold mb-4 bg-white/10 p-3 rounded-lg border border-white/20">
+                        Use ONE word from paragraphs 1 and 2 to complete each blank.
+                    </div>
+
+                    <!-- Single Continuous Paragraph with Inline Answer Buttons -->
+                    <div class="bg-black/20 p-4 md:p-5 rounded-lg border border-white/20 leading-loose text-base md:text-lg">
+                        Sometimes, people do not find online learning 
+                        <span class="inline-flex items-center gap-1 mx-1 align-baseline flex-wrap">
+                            <strong class="underline decoration-2">(i) ______</strong>
+                            <button onclick="revealAnswer(event, 'ans-q3-1')" class="bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs py-1 px-2.5 rounded shadow transition duration-300">Ans (i)</button>
+                            <span id="ans-q3-1" class="hidden font-bold bg-green-500 text-white px-2 py-0.5 rounded text-xs shadow">easy</span>
+                        </span>
+                        . For example, they may have problems with the 
+                        <span class="inline-flex items-center gap-1 mx-1 align-baseline flex-wrap">
+                            <strong class="underline decoration-2">(ii) ______</strong>
+                            <button onclick="revealAnswer(event, 'ans-q3-2')" class="bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs py-1 px-2.5 rounded shadow transition duration-300">Ans (ii)</button>
+                            <span id="ans-q3-2" class="hidden font-bold bg-green-500 text-white px-2 py-0.5 rounded text-xs shadow">video / sound</span>
+                        </span>
+                        and 
+                        <span class="inline-flex items-center gap-1 mx-1 align-baseline flex-wrap">
+                            <strong class="underline decoration-2">(iii) ______</strong>
+                            <button onclick="revealAnswer(event, 'ans-q3-3')" class="bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs py-1 px-2.5 rounded shadow transition duration-300">Ans (iii)</button>
+                            <span id="ans-q3-3" class="hidden font-bold bg-green-500 text-white px-2 py-0.5 rounded text-xs shadow">sound / video</span>
+                        </span>
+                        .
+                    </div>
+                </div>
             </div>
 
             <!-- Paragraph 3: Staying focused -->
@@ -303,6 +392,16 @@
                 <p class="paragraph-text">
                     Having a quiet place to work is important. Keep a notebook nearby for taking notes. <span class="font-semibold">Put away your phone to help you stay focused</span>.
                 </p>
+
+                <!-- Q4 Container -->
+                <div class="qa-container mt-6 pt-5 border-t-2 border-white/40 text-white">
+                    <div class="font-bold text-xl mb-3">Answer Q4:</div>
+                    <div class="text-lg mb-4 font-medium">Why does the writer suggest putting away your phone?</div>
+                    <button onclick="revealAnswer(event, 'ans-q4')" class="bg-white text-orange-600 hover:bg-orange-50 font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
+                    <div id="ans-q4" class="hidden mt-4 p-4 bg-orange-50/90 text-orange-900 rounded-lg font-bold border border-orange-200 shadow-inner">
+                        Answer: it helps you stay focused
+                    </div>
+                </div>
             </div>
 
             <!-- Paragraph 4: Taking breaks -->
@@ -313,6 +412,25 @@
                 <p class="paragraph-text">
                     Staring at a screen can be exhausting. <span class="font-semibold">Take breaks</span> when you can. A break of five to ten minutes can help you relax and clear your mind. It's also a good idea to <span class="font-semibold">have some snacks</span>.
                 </p>
+
+                <!-- Q5 Container -->
+                <div class="qa-container mt-6 pt-5 border-t-2 border-white/40 text-white">
+                    <div class="font-bold text-xl mb-3">Answer Q5:</div>
+                    <div class="text-lg mb-3 font-medium">According to the writer, what are the TWO things people can do if they feel tired?</div>
+                    
+                    <div class="bg-black/20 p-4 rounded-lg border border-white/20 space-y-4">
+                        <div class="flex items-center gap-3 flex-wrap text-base md:text-lg">
+                            <span>(i) __________________</span>
+                            <button onclick="revealAnswer(event, 'ans-q5-1')" class="bg-white text-green-800 hover:bg-green-50 font-bold text-xs py-1 px-2.5 rounded shadow transition duration-300">Ans (i)</button>
+                            <span id="ans-q5-1" class="hidden font-bold bg-yellow-400 text-green-900 px-3 py-0.5 rounded shadow">take breaks</span>
+                        </div>
+                        <div class="flex items-center gap-3 flex-wrap text-base md:text-lg">
+                            <span>(ii) __________________</span>
+                            <button onclick="revealAnswer(event, 'ans-q5-2')" class="bg-white text-green-800 hover:bg-green-50 font-bold text-xs py-1 px-2.5 rounded shadow transition duration-300">Ans (ii)</button>
+                            <span id="ans-q5-2" class="hidden font-bold bg-yellow-400 text-green-900 px-3 py-0.5 rounded shadow">have some snacks</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Paragraph 5: Staying connected -->
@@ -323,10 +441,102 @@
                 <p class="paragraph-text">
                     <span class="font-semibold">It's easy to feel isolated in online classes</span>. Try to reach out to teachers or join virtual study groups to connect with your classmates.
                 </p>
+
+                <!-- Q6 Container -->
+                <div class="qa-container mt-6 pt-5 border-t-2 border-white/40 text-white">
+                    <div class="font-bold text-xl mb-3">Answer Q6:</div>
+                    <div class="text-lg mb-4 font-medium">Find a word in paragraph 5 that means 'lonely'.</div>
+                    <button onclick="revealAnswer(event, 'ans-q6')" class="bg-white text-blue-700 hover:bg-blue-50 font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
+                    <div id="ans-q6" class="hidden mt-4 p-4 bg-blue-50/90 text-blue-900 rounded-lg font-bold border border-blue-200 shadow-inner text-xl">
+                        Answer: <span class="underline decoration-2">isolated</span>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- 這是 article-container 的結尾標籤 -->
+
+        <!-- Bottom Extra Questions Section -->
+        <div class="mt-6 space-y-4">
+            
+            <!-- Q7 Toggle Button & Container -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <button onclick="toggleExtraPanel('panel-q7')" class="w-full text-left px-6 py-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold text-lg flex justify-between items-center transition-colors">
+                    <span>📝 Q7: Match the comments to paragraphs</span>
+                    <span class="text-indigo-400">▼</span>
+                </button>
+                
+                <div id="panel-q7" class="hidden p-6 border-t border-gray-100">
+                    <div class="text-gray-800 mb-6 bg-indigo-50/50 p-4 rounded-lg border border-indigo-100 text-sm md:text-base">
+                        <span class="font-bold text-indigo-900 text-lg block mb-1">Match the comments to the correct paragraphs (2-5).</span>
+                        Use each number ONCE only. One has been done for you as an example.
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Example -->
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div class="w-full md:w-3/4 text-gray-500 italic pr-4">"My eyes always feel very tired after long hours of online classes."</div>
+                            <div class="w-full md:w-1/4 flex items-center justify-end mt-3 md:mt-0 gap-3">
+                                <span class="text-gray-400">➡️</span>
+                                <div class="w-12 h-10 border-2 border-gray-300 rounded flex items-center justify-center font-bold text-gray-500 bg-gray-100">4</div>
+                            </div>
+                        </div>
+                        
+                        <!-- i -->
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div class="w-full md:w-3/4 text-gray-800 font-medium pr-4">i) I sometimes can't hear what the teacher says online.</div>
+                            <div class="w-full md:w-1/4 flex items-center justify-end mt-3 md:mt-0 gap-3">
+                                <span class="text-gray-400">➡️</span>
+                                <button onclick="revealAnswer(event, 'ans-q7-i'); this.classList.add('hidden')" class="bg-indigo-500 text-white hover:bg-indigo-600 font-bold py-1.5 px-4 rounded shadow-sm transition">Ans</button>
+                                <div id="ans-q7-i" class="hidden w-12 h-10 border-2 border-indigo-500 rounded flex items-center justify-center font-bold text-indigo-700 bg-indigo-50">2</div>
+                            </div>
+                        </div>
+
+                        <!-- ii -->
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div class="w-full md:w-3/4 text-gray-800 font-medium pr-4">ii) I check my phone from time to time during online lessons.</div>
+                            <div class="w-full md:w-1/4 flex items-center justify-end mt-3 md:mt-0 gap-3">
+                                <span class="text-gray-400">➡️</span>
+                                <button onclick="revealAnswer(event, 'ans-q7-ii'); this.classList.add('hidden')" class="bg-indigo-500 text-white hover:bg-indigo-600 font-bold py-1.5 px-4 rounded shadow-sm transition">Ans</button>
+                                <div id="ans-q7-ii" class="hidden w-12 h-10 border-2 border-indigo-500 rounded flex items-center justify-center font-bold text-indigo-700 bg-indigo-50">3</div>
+                            </div>
+                        </div>
+
+                        <!-- iii -->
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <div class="w-full md:w-3/4 text-gray-800 font-medium pr-4">iii) I don't really like online lessons ... I feel like I'm working on my own.</div>
+                            <div class="w-full md:w-1/4 flex items-center justify-end mt-3 md:mt-0 gap-3">
+                                <span class="text-gray-400">➡️</span>
+                                <button onclick="revealAnswer(event, 'ans-q7-iii'); this.classList.add('hidden')" class="bg-indigo-500 text-white hover:bg-indigo-600 font-bold py-1.5 px-4 rounded shadow-sm transition">Ans</button>
+                                <div id="ans-q7-iii" class="hidden w-12 h-10 border-2 border-indigo-500 rounded flex items-center justify-center font-bold text-indigo-700 bg-indigo-50">5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q8 Toggle Button & Container -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <button onclick="toggleExtraPanel('panel-q8')" class="w-full text-left px-6 py-4 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-lg flex justify-between items-center transition-colors">
+                    <span>💡 Q8: Give one more tip</span>
+                    <span class="text-purple-400">▼</span>
+                </button>
+                
+                <div id="panel-q8" class="hidden p-6 border-t border-gray-100">
+                    <h3 class="font-bold text-gray-800 text-xl mb-4">8. Give one more tip on how to survive online learning.</h3>
+                    <textarea class="w-full border-2 border-gray-200 rounded-lg p-3 mb-4 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition" rows="3" placeholder="Type your answer here..."></textarea>
+                    
+                    <div>
+                        <button onclick="revealAnswer(event, 'ans-q8'); this.classList.add('hidden')" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-lg shadow-sm transition duration-300">Show Answer</button>
+                        <div id="ans-q8" class="hidden p-4 bg-purple-50 text-purple-900 rounded-lg font-bold border border-purple-200 shadow-inner inline-block w-full">
+                            Answer: <span class="font-normal italic">(Student's own answer)</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-    </div>
+
+    </div> <!-- 這是 max-w-4xl mx-auto 的結尾標籤 -->
 
     <script>
         // Track the currently zoomed element
@@ -363,8 +573,44 @@
                 overlay.classList.remove('active');
                 currentZoomedElement = null;
                 
+                // Hide all revealed answers when closing the zoom
+                const allAnswers = document.querySelectorAll('[id^="ans-"]');
+                allAnswers.forEach(ans => ans.classList.add('hidden'));
+
+                // Hide Paragraph 1 preview if open
+                const para1Box = document.getElementById('para1-preview');
+                if (para1Box) para1Box.classList.add('hidden');
+                
                 // Restore scrolling
                 document.body.style.overflow = '';
+            }
+        }
+
+        // Function to toggle Paragraph 1 inside Q3
+        function togglePara1(event) {
+            event.stopPropagation();
+            const para1Box = document.getElementById('para1-preview');
+            if (para1Box) {
+                para1Box.classList.toggle('hidden');
+            }
+        }
+
+        // Function to reveal the answer without closing the zoomed block
+        function revealAnswer(event, answerId) {
+            event.stopPropagation(); // Stop the click from bubbling up to the container
+            const answerElement = document.getElementById(answerId);
+            if (answerElement) {
+                answerElement.classList.remove('hidden');
+            }
+        }
+
+        // Function to toggle the bottom extra panels (Q7 and Q8)
+        function toggleExtraPanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+            } else {
+                panel.classList.add('hidden');
             }
         }
 
