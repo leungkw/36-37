@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Reading: How to survive online learning</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></scrAipt>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -291,6 +291,29 @@
                 transform: translate(-50%, -50%) rotate(0deg) scale(1.2); /* Adjust title scale for mobile */
             }
         }
+        
+        /* New styles for Q6 images */
+        .q6-images-container {
+            display: none;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .interactive-block.zoomed .q6-images-container {
+            display: flex;
+            animation: fadeIn 0.4s ease-in-out forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .q6-img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
@@ -493,11 +516,21 @@
 
                 <!-- Q6 Container -->
                 <div class="qa-container mt-6 pt-5 border-t-2 border-white/40 text-white">
-                    <div class="font-bold text-xl mb-3">Answer Q6:</div>
-                    <div class="text-lg mb-4 font-medium">Find a word in paragraph 5 that means 'lonely'.</div>
-                    <button onclick="revealAnswer(event, 'ans-q6')" class="bg-white text-blue-700 hover:bg-blue-50 font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
-                    <div id="ans-q6" class="hidden mt-4 p-4 bg-blue-50/90 text-blue-900 rounded-lg font-bold border border-blue-200 shadow-inner text-xl">
-                        Answer: <span class="underline decoration-2">isolated</span>
+                    <div class="flex flex-col md:flex-row justify-between items-start">
+                        <div class="w-full md:w-1/2">
+                            <div class="font-bold text-xl mb-3">Answer Q6:</div>
+                            <div class="text-lg mb-4 font-medium">Find a word in paragraph 5 that means 'lonely'.</div>
+                            <button onclick="revealAnswer(event, 'ans-q6')" class="bg-white text-blue-700 hover:bg-blue-50 font-bold py-2 px-8 rounded-lg shadow-md transition duration-300">Ans</button>
+                            <div id="ans-q6" class="hidden mt-4 p-4 bg-blue-50/90 text-blue-900 rounded-lg font-bold border border-blue-200 shadow-inner text-xl inline-block">
+                                Answer: <span class="underline decoration-2">isolated</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Added images for Q6 -->
+                        <div class="q6-images-container w-full md:w-1/2">
+                            <img src="isolated.jpg" alt="Feeling isolated" class="q6-img">
+                            <img src="https://placehold.co/150x150/1abc9c/ffffff?text=Virtual\nStudy\nGroup" alt="Virtual study group" class="q6-img">
+                        </div>
                     </div>
                 </div>
             </div>
